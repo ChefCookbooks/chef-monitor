@@ -41,11 +41,12 @@ when Chef::Config[:solo]
     data_bag_item("sensu_checks", item)
   end
 else
-  search(:sensu_checks, "*:*")
+  node["monitor"]["sensu_checks"]
 end
 
-check_definitions.each do |check|
-  sensu_check check["id"] do
+check_definitions.each do |id, check|
+  sensu_check id do
+    Chef::Log.info("Monitor: adding check: #{check['id']}")
     type check["type"]
     command check["command"]
     subscribers check["subscribers"]
