@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: monitor
-# Recipe:: rabbitmq
+# Recipe:: _sudo
 #
 # Copyright 2013, Sean Porter Consulting
 #
@@ -17,12 +17,10 @@
 # limitations under the License.
 #
 
-include_recipe "monitor::_rabbitmq"
-
-sensu_check "rabbitmq_overview_metrics" do
-  type "metric"
-  command "rabbitmq-overview-metrics.rb"
-  handlers ["metrics"]
-  standalone true
-  interval 30
+sudo "sensu" do
+  user "sensu"
+  runas "root"
+  commands node["monitor"]["sudo_commands"]
+  host "ALL"
+  nopasswd true
 end

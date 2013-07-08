@@ -26,6 +26,8 @@ when Chef::Config[:solo]
   master_address ||= "localhost"
 when master_address.nil?
   master_node = case
+  when node["recipes"].include?("monitor::master")
+    node
   when node["monitor"]["environment_aware_search"]
     search(:node, "chef_environment:#{node.chef_environment} AND recipes:monitor\\:\\:master").first
   else

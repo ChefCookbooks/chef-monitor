@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: monitor
-# Recipe:: rabbitmq
+# Recipe:: haproxy
 #
 # Copyright 2013, Sean Porter Consulting
 #
@@ -17,12 +17,11 @@
 # limitations under the License.
 #
 
-include_recipe "monitor::_rabbitmq"
+include_recipe "monitor::_haproxy"
 
-sensu_check "rabbitmq_overview_metrics" do
-  type "metric"
-  command "rabbitmq-overview-metrics.rb"
-  handlers ["metrics"]
+sensu_check "haproxy_services" do
+  command "sudo check-haproxy.rb -s :::haproxy_services::: -w :::haproxy_warning|75::: -c :::haproxy_critical|50:::"
+  handlers ["default"]
   standalone true
   interval 30
 end
